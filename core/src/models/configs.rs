@@ -1,34 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
-pub enum Drivers {
-    SQLite,
-    MySQL,
-    PostgreSQL,
-    MongoDB,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Connector {
-    pub driver: Drivers,
-    pub host: String,
-    pub port: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct DBconfig {
-    pub connector: Connector,
-    pub db_name: String,
-    pub db_login: String,
-    pub db_password: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct User {
-    pub username: String,
-    pub login: String,
-    pub password: String,
-}
+use super::{Connector, DBconfig, Drivers, User};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Settings {
@@ -64,5 +36,9 @@ impl Config {
                 },
             },
         }
+    }
+
+    pub fn get_port(&self) -> u16 {
+        self.settings.port.parse().unwrap()
     }
 }

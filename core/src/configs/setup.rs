@@ -21,12 +21,12 @@ impl From<toml::de::Error> for ConfigError {
     }
 }
 
-fn init() -> Config {
+pub fn init() -> Config {
     let mut config: Config = Config::by_default();
 
     if config_file().exists() {
         let content = std::fs::read_to_string(config_file()).unwrap();
-        config = toml::from_str(&content).expect("oooops");
+        config = toml::from_str(&content).unwrap();
     } else {
         save_config(&config).unwrap();
     }
@@ -34,18 +34,6 @@ fn init() -> Config {
     config
 }
 
-pub fn get_port() -> u16 {
-    let config = init();
-    println!("{:?}", &config);
-    let port: u16 = config
-        .settings
-        .port
-        .parse()
-        .expect("settings in config file is damaged");
-    port
-}
-
-#[allow(dead_code)]
 pub fn save_config(config: &Config) -> Result<(), ConfigError> {
     let toml_config = toml::to_string(config).unwrap();
     if config_file().exists() {

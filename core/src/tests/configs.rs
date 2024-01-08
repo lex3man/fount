@@ -1,5 +1,5 @@
 use crate::{
-    configs::{config_dir, config_file, get_port, save_config},
+    configs::{config_dir, config_file, init, save_config},
     models::Config,
 };
 
@@ -31,13 +31,13 @@ fn new_config() {
 
 #[test]
 fn edit_config() {
-    let port: u16 = 1180;
-    let mut config = Config::by_default();
+    let port: u16 = 8088;
+    let mut config = init();
 
     config.settings.port = port.to_string();
     save_config(&config).unwrap();
 
-    let config_port = get_port();
+    let config_port = config.get_port();
 
     assert_eq!(config_port, port);
 }
